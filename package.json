@@ -1,0 +1,34 @@
+{
+  "devDependencies": {
+    "@types/node": "^14.0.9",
+    "typescript": "^3.9.3"
+  },
+  "name": "windows-clipboard-buffer",
+  "description": "This can convert the buffer copied to the clipboard by Windows into text and output it.",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@types/encoding-japanese": "^1.0.15",
+    "encoding-japanese": "^1.0.30",
+    "iconv-lite": "^0.5.1"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katai5plate/win-clipboard-buffer-to-text.git"
+  },
+  "keywords": [
+    "windows",
+    "clipboard",
+    "buffer"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/katai5plate/win-clipboard-buffer-to-text/issues"
+  },
+  "homepage": "https://github.com/katai5plate/win-clipboard-buffer-to-text#readme"
+}

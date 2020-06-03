@@ -1,0 +1,90 @@
+#runtime "hsp3cl"
+#include "./lib.hsp"
+
+args = dir_cmdline
+split args, " ", _, mode, formatId
+
+if formatId = "" : goto *err_args
+
+errCode = 0
+
+switch mode
+	case "get"
+		getcbbin data, int(formatId)
+		errCode = stat
+		if errCode < 0 : goto *err_code_get
+		out = ""
+		repeat varsize(data)
+			out += strf("%02x", peek(data, cnt))
+		loop
+		mes out		
+		swbreak
+	case "set"
+		goto *err_none
+		swbreak
+	default
+		goto *err_args
+		swbreak
+swend
+end
+
+*err_args
+	mes "ERROR(0): Invalid argument."
+	end
+
+*err_none
+	mes "ERROR(0): Unimplemented features."
+	end
+
+*err_code_get
+	message = "ERROR(" + errCode + "): "
+	switch errCode
+		case -1
+			message += "Cannot open clipboard."
+			swbreak
+		case -2
+			message += "There is no content in the clipboard."
+			swbreak
+		case -3
+			message += "FormatId is invalid."
+			swbreak
+		case -4
+			message += "Cannot get data."
+			swbreak
+		case -5
+			message += "Failed to secure global memory."
+			swbreak
+		case -6
+			message += "Failed to lock global memory."
+			swbreak
+		case -7
+			message += "Failed to copy global memory."
+			swbreak
+	swend
+	mes message
+	end
+
+*err_code_set
+	message = "ERROR(" + errCode + "): "
+	switch errCode
+		case -1
+			message += "Size is abnormal."
+			swbreak
+		case -2
+			message += "Failed to secure global memory."
+			swbreak
+		case -3
+			message += "Failed to lock global memory."
+			swbreak
+		case -4
+			message += "Cannot open clipboard."
+			swbreak
+		case -5
+			message += "Failed to get ownership of clipboard."
+			swbreak
+		case -6
+			message += "Failed to copy clipboard."
+			swbreak
+	swend
+	mes message
+	end

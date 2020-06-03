@@ -1,0 +1,154 @@
+#runtime "hsp3cl"
+/******************************************************************************
+ RPGツクール 200x イベント内容のクリップボード取得・書きこみモジュール
+
+ 作者 イノビア
+ http://homepage2.nifty.com/MJHS/ (http://www.hinekure.net/)
+ http://www.tkooler.net/
+
+ ※ 自由に転載・改造・配布可能です。
+
+ ・命令
+ getcbbin p1 【クリップボードからバイナリデータを取得します】
+
+ p1 = 代入変数
+
+ 戻り値(stat)
+
+ 0 以上 : 正常終了でバッファサイズとなっています。
+ -1 : クリップボードを開けない
+ -2 : クリップボードの中身がない
+ -3 : ツクール形式のクリップボードではない
+ -4 : データが取れない
+ -5 : グローバルメモリの確保に失敗
+ -6 : グローバルメモリのロック失敗
+ -7 : グローバルメモリのコピーに失敗
+
+-------------------------------------------------------------------------------
+ setcbbin p1,p2 【クリップボードにデータを書き込みます】
+
+ p1 = 代入変数
+ p2 = バッファのサイズ
+
+ 戻り値(stat)
+
+ 0  : 正常終了
+ -1 : サイズ異常
+ -2 : グローバルメモリの確保に失敗
+ -3 : グローバルメモリのロック失敗
+ -4 : クリップボードを開けない
+ -5 : クリップボードの所有権取得に失敗
+ -6 : クリップボードのコピーに失敗
+
+******************************************************************************/
+
+#include "user32.as"
+#include "kernel32.as"
+#module "_TKOOLEVCB_"
+
+// 共通
+#deffunc _opencb
+	repeat 100
+		OpenClipboard 0
+		res = stat
+		if res ! 0 : break
+	loop
+	return res
+	
+#deffunc getcbbin var cbBinBuf, int formatId
+	_opencb
+	// 失敗
+	if stat=0 : return -1
+
+	// 数を取得
+	CountClipboardFormats
+	if stat = 0 : CloseClipboard : return -2
+	formatsNum = stat
+
+	// 内容が formatId かどうか？
+	res = 0
+	repeat formatsNum
+		EnumClipboardFormats 0
+		if stat = formatId : res = 1 : break
+		if stat = 0 : continue
+	loop
+
+	// formatId が見つからない
+	if res = 0 : CloseClipboard : return -3
+	
+	// データ取得
+	GetClipboardData formatId
+	if stat = 0 : CloseClipboard : return -4
+	hGlobalMem = stat	
+	
+	// グローバルメモリブロックのサイズ取得
+	GlobalSize hGlobalMem
+	if stat=0 :	CloseClipboard : return -5
+	globalMemLen = stat
+
+	// 受け取りバッファー初期化
+	sdim cbBinBuf, globalMemLen
+	bufPtr = varptr(cbBinBuf)
+
+	// グローバルメモリブロックをロック
+	GlobalLock hGlobalMem
+	if stat=0 :	CloseClipboard : return -6
+	globalMemPtr = stat
+
+	// バッファーへコピー
+	dupptr cbBinBuf, globalMemPtr, globalMemLen, 2
+	res = stat
+	GlobalUnlock hGlobalMem
+	CloseClipboard
+	if res=0 : return -7
+
+	// サイズを返す
+	return globalMemLen
+
+// これだけ定義されていないので書いておく
+#uselib "kernel32.dll"
+#func CopyMemory "RtlMoveMemory" sptr, sptr, sptr
+
+#deffunc setcbbin var cbBinBuf, int size, int formatId
+
+	// サイズチェック
+	if size <= 0 : return -1
+
+	// グローバルメモリブロック確保
+	GlobalAlloc 66, size
+	if stat = 0 : return -2
+
+	hGlobalMem = stat
+
+	// ポインター取得
+	binptr = varptr(cbBinBuf)
+
+	// グローバルメモリブロックをロック
+	GlobalLock hGlobalMem
+	if stat = 0 : GlobalFree hGlobalMem : return -3
+
+	globalMemPtr = stat
+
+	// グローバルメモリブロックにコピー(結果が返ってこないのでちと不安)
+	CopyMemory globalMemPtr, binptr, size
+
+	// グローバルメモリブロックのロック解除
+	GlobalUnlock hGlobalMem
+
+	// クリップボードオープン
+	_opencb
+	if stat = 0 : GlobalFree hGlobalMem : return -4
+
+	// クリップボードの所有権をゲット
+	EmptyClipboard
+	if stat = 0 : GlobalFree hGlobalMem : CloseClipboard : return -5
+
+	// クリップボードにコピー
+	SetClipboardData formatId, hGlobalMem
+	if stat = 0 : GlobalFree hGlobalMem : CloseClipboard : return -6
+
+	// クリップボードをクローズ
+	CloseClipboard
+
+	return 0
+#global
