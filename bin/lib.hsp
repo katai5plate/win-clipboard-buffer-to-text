@@ -67,10 +67,12 @@
 
 	// “à—e‚ª formatId ‚©‚Ç‚¤‚©H
 	res = 0
+	fmt = 0
 	repeat formatsNum
-		EnumClipboardFormats 0
-		if stat = formatId : res = 1 : break
-		if stat = 0 : continue
+		EnumClipboardFormats fmt
+		fmt = stat
+		if fmt = formatId : res = 1 : break
+		if fmt = 0 : continue
 	loop
 
 	// formatId ‚ªŒ©‚Â‚©‚ç‚È‚¢

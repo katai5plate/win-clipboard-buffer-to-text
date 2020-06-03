@@ -1,0 +1,29 @@
+#runtime "hsp3cl"
+#include "./lib.hsp"
+
+// NOTE: 適当な HTML をコピーして実行
+
+a=""
+getcbbin a, 49381
+mes cnt
+mes varsize(a)
+
+data=""
+getcbbin b, 13
+mes cnt
+mes varsize(b)
+
+data=""
+getcbbin b, 16
+mes cnt
+mes varsize(b)
+
+data=""
+getcbbin b, 1
+mes cnt
+mes varsize(b)
+
+data=""
+getcbbin b, 7
+mes cnt
+mes varsize(b)
