@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBuffer = exports.getText = void 0;
+exports.getText = exports.getBuffer = exports.getBufferText = exports.getArray = void 0;
 const child_process_1 = require("child_process");
 const iconv_lite_1 = require("iconv-lite");
 var Mode;
@@ -17,6 +17,10 @@ const run = (mode, formatId) => {
     }
     return result;
 };
-exports.getText = (formatId) => run(Mode.get, formatId);
-exports.getBuffer = (formatId) => Buffer.from(run(Mode.get, formatId).match(/.{1,2}/g).map((x) => Number(`0x${x}`)));
+exports.getArray = (formatId) => run(Mode.get, formatId).match(/.{1,2}/g).map((x) => Number(`0x${x}`));
+exports.getBufferText = (formatId) => run(Mode.get, formatId);
+exports.getBuffer = (formatId) => Buffer.from(exports.getArray(formatId));
+exports.getText = (formatId) => exports.getArray(formatId)
+    .map((x) => String.fromCharCode(x))
+    .join("");
 //# sourceMappingURL=index.js.map

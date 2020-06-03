@@ -21,10 +21,13 @@ const run = (mode: Mode, formatId: number) => {
   return result;
 };
 
-export const getText = (formatId: number) => run(Mode.get, formatId);
-export const getBuffer = (formatId: number) =>
-  Buffer.from(
-    (run(Mode.get, formatId).match(/.{1,2}/g) as string[]).map((x) =>
-      Number(`0x${x}`)
-    )
+export const getArray = (formatId: number) =>
+  (run(Mode.get, formatId).match(/.{1,2}/g) as string[]).map((x) =>
+    Number(`0x${x}`)
   );
+export const getBufferText = (formatId: number) => run(Mode.get, formatId);
+export const getBuffer = (formatId: number) => Buffer.from(getArray(formatId));
+export const getText = (formatId: number) =>
+  getArray(formatId)
+    .map((x) => String.fromCharCode(x))
+    .join("");
