@@ -5,7 +5,7 @@
   },
   "name": "windows-clipboard-buffer",
   "description": "This can convert the buffer copied to the clipboard by Windows into text and output it.",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "dependencies": {
     "@types/encoding-japanese": "^1.0.15",
