@@ -1,4 +1,4 @@
-# win-clipboard-buffer-to-text
+# windows-clipboard-buffer
 
 This can convert the buffer copied to the clipboard by Windows into text and output it.
 
