@@ -2,14 +2,7 @@
 # yarn lockfile v1
 
 
-"@types/encoding-japanese@^1.0.15":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@types/encoding-japanese/-/encoding-japanese-1.0.15.tgz#5df7c9c6965255a8aa10a7435eba75384fd0df09"
-  integrity sha1-XffJxpZSVaiqEKdDXrp1OE/Q3wk=
-  dependencies:
-    "@types/node" "*"
-
-"@types/node@*", "@types/node@^14.0.9":
+"@types/node@^14.0.9":
   version "14.0.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.9.tgz#43896ab87fc82bda1dfd600cdf44a0c8a64e11d2"
   integrity sha512-0sCTiXKXELOBxvZLN4krQ0FPOAA7ij+6WwvD0k/PHd9/KAkr4dXel5J9fh6F4x1FwAQILqAWkmpeuS6mjf1iKA==

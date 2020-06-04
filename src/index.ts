@@ -31,3 +31,14 @@ export const getText = (formatId: number) =>
   getArray(formatId)
     .map((x) => String.fromCharCode(x))
     .join("");
+
+////////////////
+// Deprecated //
+////////////////
+
+export const getPlainText = (formatId: number) => {
+  console.warn(
+    "Deprecation Warning: getPlainText has been renamed to getText, please use getText"
+  );
+  return getText(formatId);
+};
