@@ -1,14 +1,20 @@
 import { execSync } from "child_process";
 import { decode } from "iconv-lite";
+import { writeFileSync } from "fs";
 
 enum Mode {
   get = "get",
   set = "set",
+  setFile = "setfile",
 }
 
-const run = (mode: Mode, formatId: number) => {
+const run = (mode: Mode, formatId: number, text?: string) => {
   const result = decode(
-    execSync(`"${__dirname}\\..\\bin\\hsptmp.exe" ${mode} ${formatId}`),
+    execSync(
+      mode === Mode.get
+        ? `"${__dirname}\\..\\bin\\hsptmp.exe" ${mode} ${formatId}`
+        : `"${__dirname}\\..\\bin\\hsptmp.exe" ${mode} ${formatId} ${text}`
+    ),
     "Shift-JIS"
   )
     .toString()
@@ -19,6 +25,11 @@ const run = (mode: Mode, formatId: number) => {
   }
 
   return result;
+};
+
+export const setBuffer = (formatId: number, buffer: Buffer) => {
+  writeFileSync(`${__dirname}\\..\\bin\\out.ignore.temp`, buffer);
+  run(Mode.setFile, formatId, `${__dirname}\\..\\bin\\out.ignore.temp`);
 };
 
 export const getArray = (formatId: number) =>
@@ -34,14 +45,3 @@ export const getText = (formatId: number) =>
 // encoding: https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings
 export const getDecodedText = (formatId: number, encoding: string) =>
   decode(Buffer.from(getArray(formatId)), encoding);
-
-////////////////
-// Deprecated //
-////////////////
-
-export const getPlainText = (formatId: number) => {
-  console.warn(
-    "Deprecation Warning: getPlainText has been renamed to getText, please use getText"
-  );
-  return getText(formatId);
-};

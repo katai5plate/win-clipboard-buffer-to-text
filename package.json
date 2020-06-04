@@ -12,7 +12,8 @@
   },
   "scripts": {
     "dev": "tsc -w",
-    "test": "node test"
+    "test:get": "node test.get",
+    "test:set": "node test.set"
   },
   "repository": {
     "type": "git",

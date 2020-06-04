@@ -2,7 +2,7 @@
 #include "./lib.hsp"
 
 args = dir_cmdline
-split args, " ", _, mode, formatId
+split args, " ", _, mode, formatId, text
 
 if formatId = "" : goto *err_args
 
@@ -21,6 +21,15 @@ switch mode
 		swbreak
 	case "set"
 		goto *err_none
+		swbreak
+	case "setfile"
+		exist text
+		bufsize = strsize
+		dim file, bufsize
+		bload text, file
+		binsize = strsize
+		setcbbin file, binsize, int(formatId)
+		mes "DONE"
 		swbreak
 	default
 		goto *err_args
