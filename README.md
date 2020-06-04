@@ -1,4 +1,5 @@
 # windows-clipboard-buffer
+<img alt="npm" src="https://img.shields.io/npm/v/windows-clipboard-buffer">
 
 This can convert the buffer copied to the clipboard by Windows into text and output it.
 
