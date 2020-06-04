@@ -31,6 +31,9 @@ export const getText = (formatId: number) =>
   getArray(formatId)
     .map((x) => String.fromCharCode(x))
     .join("");
+// encoding: https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings
+export const getDecodedText = (formatId: number, encoding: string) =>
+  decode(Buffer.from(getArray(formatId)), encoding);
 
 ////////////////
 // Deprecated //

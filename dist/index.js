@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPlainText = exports.getText = exports.getBuffer = exports.getBufferText = exports.getArray = void 0;
+exports.getPlainText = exports.getDecodedText = exports.getText = exports.getBuffer = exports.getBufferText = exports.getArray = void 0;
 const child_process_1 = require("child_process");
 const iconv_lite_1 = require("iconv-lite");
 var Mode;
@@ -23,6 +23,8 @@ exports.getBuffer = (formatId) => Buffer.from(exports.getArray(formatId));
 exports.getText = (formatId) => exports.getArray(formatId)
     .map((x) => String.fromCharCode(x))
     .join("");
+// encoding: https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings
+exports.getDecodedText = (formatId, encoding) => iconv_lite_1.decode(Buffer.from(exports.getArray(formatId)), encoding);
 ////////////////
 // Deprecated //
 ////////////////

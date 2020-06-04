@@ -13,13 +13,20 @@ This can convert the buffer copied to the clipboard by Windows into text and out
 **code**:
 
 ```js
-const { getBuffer, getText } = require("windows-clipboard-buffer");
+const {
+  getBuffer,
+  getText,
+  getDecodedText,
+} = require("windows-clipboard-buffer");
 
 const formatId = 49381; // HTML Format
 
 console.log(getBuffer(formatId));
 
 console.log(getText(formatId));
+
+// console.log(getDecodedText(formatId, "Shift_JIS"));
+// ref: https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings
 ```
 
 **result**:
