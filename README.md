@@ -13,13 +13,13 @@ This can convert the buffer copied to the clipboard by Windows into text and out
 **code**:
 
 ```js
-const { getBuffer, getPlainText } = require("windows-clipboard-buffer");
+const { getBuffer, getText } = require("windows-clipboard-buffer");
 
 const formatId = 49381; // HTML Format
 
 console.log(getBuffer(formatId));
 
-console.log(getPlainText(formatId));
+console.log(getText(formatId));
 ```
 
 **result**:
